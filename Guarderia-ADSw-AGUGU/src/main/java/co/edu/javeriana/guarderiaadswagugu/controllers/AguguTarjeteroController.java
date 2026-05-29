@@ -233,6 +233,12 @@ public class AguguTarjeteroController implements Initializable {
         if (tblCarneVacunas != null) tblCarneVacunas.setItems(listaDosis);
 
         if (colNinoPendiente != null)    colNinoPendiente.setCellValueFactory(new PropertyValueFactory<>("nino"));
+        if (tblVacunasPendientes != null) {
+            TableColumn<PendienteFila, String> colRcPendiente = new TableColumn<>("RC");
+            colRcPendiente.setCellValueFactory(new PropertyValueFactory<>("rc"));
+            colRcPendiente.setPrefWidth(90);
+            tblVacunasPendientes.getColumns().add(0, colRcPendiente);
+        }
         if (colVacunaPendiente != null)  colVacunaPendiente.setCellValueFactory(new PropertyValueFactory<>("vacuna"));
         if (colEdadPendiente != null)    colEdadPendiente.setCellValueFactory(new PropertyValueFactory<>("edad"));
         if (colSucursalPendiente != null)colSucursalPendiente.setCellValueFactory(new PropertyValueFactory<>("sucursal"));
@@ -299,9 +305,8 @@ public class AguguTarjeteroController implements Initializable {
             return;
         }
         lblRolActual.setText(usuarioActual.getRol().name().replace("_", " "));
-        lblRolDescripcion.setText("Sesión activa: " + user);
-        bloquearTabs(false);
-        tabPanePrincipal.getSelectionModel().select(tabInscripcion);
+        lblRolDescripcion.setText("Sesion activa: " + user);
+        aplicarPermisosPorRol(usuarioActual.getRol());
         recargarTodosLosInscritos();
     }
 
@@ -328,6 +333,36 @@ public class AguguTarjeteroController implements Initializable {
         if (tabConsolidado != null)   tabConsolidado.setDisable(bloquear);
         if (tabVacunas != null)       tabVacunas.setDisable(bloquear);
         if (tabSerializacion != null) tabSerializacion.setDisable(bloquear);
+    }
+
+    private void aplicarPermisosPorRol(Usuario.Rol rol) {
+        // Primero bloquear todo
+        bloquearTabs(true);
+
+        switch (rol) {
+            case ADMIN_SUCURSAL -> {
+                // Acceso completo a todo
+                bloquearTabs(false);
+                tabPanePrincipal.getSelectionModel().select(tabInscripcion);
+                lblRolDescripcion.setText("Acceso completo: inscripcion, dieta, actividades, evaluacion, consolidado, vacunas, serializacion.");
+            }
+            case ESPECIALISTA -> {
+                // Solo Dieta y Vacunas
+                if (tabDieta != null)   tabDieta.setDisable(false);
+                if (tabVacunas != null) tabVacunas.setDisable(false);
+                tabPanePrincipal.getSelectionModel().select(tabDieta);
+                lblRolDescripcion.setText("Acceso: Dieta personalizada y Carne de vacunas.");
+            }
+            case ADMIN_LOCALIDAD -> {
+                // Inscripcion, Consolidado y Serializacion
+                if (tabInscripcion != null)   tabInscripcion.setDisable(false);
+                if (tabConsolidado != null)   tabConsolidado.setDisable(false);
+                if (tabSerializacion != null) tabSerializacion.setDisable(false);
+                tabPanePrincipal.getSelectionModel().select(tabInscripcion);
+                lblRolDescripcion.setText("Acceso: Inscripcion, Consolidado financiero y Serializacion.");
+            }
+            default -> bloquearTabs(true);
+        }
     }
 
     // Navegación desde menú lateral
@@ -464,7 +499,35 @@ public class AguguTarjeteroController implements Initializable {
     @FXML
     private void onConsultarDieta() {
         String id = txtIdNinoDieta.getText().trim();
-        if (id.isEmpty()) { mostrarAlerta(Alert.AlertType.WARNING, "Error", "Ingrese ID del niño."); return; }
+
+        // Si el campo está vacío, mostrar selector de niños con RC
+        if (id.isEmpty()) {
+            List<Nino> todos = new ArrayList<>();
+            for (Localidad l : guarderia.getLocalidades())
+                for (Sucursal s : l.getSucursales())
+                    todos.addAll(s.getNinos());
+
+            if (todos.isEmpty()) { mostrarAlerta(Alert.AlertType.WARNING, "Sin niños", "No hay niños inscritos."); return; }
+
+            List<String> opciones = new ArrayList<>();
+            for (Nino n : todos)
+                opciones.add("RC: " + n.getRegistroCivil() + "  |  " + n.getNombre() + "  (" + n.getTipoNino() + ")");
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(opciones.get(0), opciones);
+            dialog.setTitle("Seleccionar niño");
+            dialog.setHeaderText("Seleccione el niño para ver/editar su dieta:");
+            dialog.setContentText("Niño:");
+            Optional<String> res = dialog.showAndWait();
+            if (res.isEmpty()) return;
+
+            int idx = opciones.indexOf(res.get());
+            Nino elegido = todos.get(idx);
+            txtIdNinoDieta.setText(String.valueOf(elegido.getRegistroCivil()));
+            ninoSeleccionado = elegido;
+            txtNombreNinoDieta.setText(elegido.getNombre());
+            recargarDieta(elegido);
+            return;
+        }
 
         Nino nino = buscarNinoPorRc(id);
         if (nino == null) {
@@ -654,7 +717,39 @@ public class AguguTarjeteroController implements Initializable {
         if (id.isEmpty()) { mostrarAlerta(Alert.AlertType.WARNING, "Error", "Ingrese cédula del empleado."); return; }
         Empleado emp = buscarEmpleadoPorCedula(id);
         if (emp == null) {
-            mostrarAlerta(Alert.AlertType.WARNING, "No encontrado", "Empleado con cédula " + id + " no encontrado.");
+            String nombre = txtNombreEmpleado.getText().trim();
+            String cargo  = cmbCargoEmpleado.getValue();
+            if (nombre.isEmpty() || cargo == null) {
+                mostrarAlerta(Alert.AlertType.WARNING, "No encontrado",
+                        "Empleado no encontrado.\n\nPara crearlo, complete Nombre y Cargo y vuelva a buscar.");
+                return;
+            }
+            Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+            confirm.setTitle("Empleado no encontrado");
+            confirm.setHeaderText(null);
+            confirm.setContentText("No existe empleado con cedula " + id + ".\n\n¿Desea crearlo?\n  Nombre: " + nombre + "\n  Cargo: " + cargo);
+            Optional<ButtonType> res = confirm.showAndWait();
+            if (res.isEmpty() || res.get() != ButtonType.OK) return;
+            int experiencia = 0;
+            double salario = 0;
+            try { experiencia = Integer.parseInt(txtExperienciaEmpleado.getText().trim()); } catch (Exception ignored) {}
+            try { salario = Double.parseDouble(txtSalarioActual.getText().trim()); } catch (Exception ignored) {}
+            int cedula = 0;
+            try { cedula = Integer.parseInt(id); } catch (Exception ignored) {}
+            if (salario == 0) salario = 2000000 + (experiencia * 200000L);
+            Empleado nuevo = new Empleado(nombre, cedula, LocalDate.now(), "", cargo, 0, cargo, experiencia, false);
+            nuevo.setSalario(salario);
+            for (Localidad l : guarderia.getLocalidades()) {
+                for (Sucursal s : l.getSucursales()) { s.getEmpleados().add(nuevo); break; }
+                break;
+            }
+            empleadoSeleccionado = nuevo;
+            txtNombreEmpleado.setText(nuevo.getNombre());
+            txtExperienciaEmpleado.setText(String.valueOf(nuevo.getExperienciaAnios()));
+            cmbCargoEmpleado.setValue(nuevo.getCargo());
+            txtSalarioActual.setText(String.format("%.0f", nuevo.getSalario()));
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Empleado creado",
+                    "Empleado '" + nombre + "' creado.\nSalario: $" + String.format("%,.0f", salario));
             return;
         }
         empleadoSeleccionado = emp;
@@ -845,7 +940,8 @@ public class AguguTarjeteroController implements Initializable {
                     if (vacunaBuscar.isEmpty() || !n.getCarne().tieneVacuna(vacunaBuscar))
                         listaPendientes.add(new PendienteFila(n.getNombre(),
                                 vacunaBuscar.isEmpty() ? "Todas" : vacunaBuscar,
-                                n.getEdadEnMeses() + "m", s.getNombre()));
+                                n.getEdadEnMeses() + "m", s.getNombre(),
+                                String.valueOf(n.getRegistroCivil())));
         if (listaPendientes.isEmpty())
             mostrarAlerta(Alert.AlertType.INFORMATION, "Pendientes",
                     "No hay niños pendientes de vacunación para el filtro seleccionado.");
@@ -1105,12 +1201,13 @@ public class AguguTarjeteroController implements Initializable {
     }
 
     public static class PendienteFila {
-        private final String nino, vacuna, edad, sucursal;
-        public PendienteFila(String n, String v, String e, String s){
-            nino=n; vacuna=v; edad=e; sucursal=s; }
+        private final String nino, vacuna, edad, sucursal, rc;
+        public PendienteFila(String n, String v, String e, String s, String r){
+            nino=n; vacuna=v; edad=e; sucursal=s; rc=r; }
         public String getNino()     { return nino; }
         public String getVacuna()   { return vacuna; }
         public String getEdad()     { return edad; }
         public String getSucursal() { return sucursal; }
+        public String getRc()       { return rc; }
     }
 }
