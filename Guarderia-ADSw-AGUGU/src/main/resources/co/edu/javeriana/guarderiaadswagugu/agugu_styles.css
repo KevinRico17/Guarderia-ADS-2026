@@ -1,0 +1,287 @@
+
+
+.root-agugu {
+    -fx-background-color: linear-gradient(to bottom right, #F8FBFF, #EEF7FF, #F9F5FF);
+    -fx-font-family: "Segoe UI", "Arial";
+    -fx-text-fill: #111827;
+}
+
+/* Fondo general de cada pestaña */
+.content-pane {
+    -fx-background-color: linear-gradient(to bottom right, #F8FBFF, #EEF7FF, #F9F5FF);
+    -fx-padding: 22;
+}
+
+/* Menu lateral */
+.side-menu {
+    -fx-background-color: linear-gradient(to bottom, #EAF4FF, #F6FFF1);
+    -fx-border-color: #D8E2F0;
+    -fx-border-width: 0 1 0 0;
+}
+
+.logo-title {
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #24597A;
+}
+
+.logo-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #667085;
+}
+
+/* Sesion actual */
+.session-card {
+    -fx-background-color: rgba(255,255,255,0.90);
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #D8E2F0;
+    -fx-padding: 12;
+    -fx-effect: dropshadow(gaussian, rgba(36, 89, 122, 0.10), 10, 0.18, 0, 3);
+}
+
+.session-role {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #24597A;
+}
+
+.session-description {
+    -fx-font-size: 11px;
+    -fx-text-fill: #667085;
+}
+
+/* Botones del menu */
+.menu-button {
+    -fx-background-color: rgba(255,255,255,0.92);
+    -fx-border-color: #D8E2F0;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10 14 10 14;
+    -fx-cursor: hand;
+    -fx-text-fill: #1F2937;
+}
+
+.menu-button:hover {
+    -fx-background-color: #D9ECFA;
+}
+
+/* Cards principales */
+.hero-card {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.97), rgba(239,247,255,0.94));
+    -fx-background-radius: 28;
+    -fx-border-radius: 28;
+    -fx-border-color: #D8E2F0;
+    -fx-effect: dropshadow(gaussian, rgba(36, 89, 122, 0.18), 20, 0.24, 0, 7);
+    -fx-padding: 24;
+}
+
+.form-card {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.97), rgba(248,251,255,0.93));
+    -fx-background-radius: 24;
+    -fx-border-radius: 24;
+    -fx-border-color: #D8E2F0;
+    -fx-effect: dropshadow(gaussian, rgba(36, 89, 122, 0.13), 14, 0.18, 0, 5);
+    -fx-padding: 18;
+}
+
+.result-card {
+    -fx-background-color: linear-gradient(to bottom right, rgba(255,255,255,0.96), rgba(247,251,255,0.90));
+    -fx-background-radius: 24;
+    -fx-border-radius: 24;
+    -fx-border-color: #D8E2F0;
+    -fx-effect: dropshadow(gaussian, rgba(36, 89, 122, 0.10), 12, 0.16, 0, 4);
+    -fx-padding: 16;
+}
+
+/* Titulos */
+.page-title {
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1C3557;
+}
+
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #667085;
+}
+
+.section-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #24597A;
+}
+
+.field-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #344054;
+}
+
+/* Campos */
+.text-field,
+.text-area,
+.combo-box,
+.date-picker {
+    -fx-background-color: #FFFFFF;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-padding: 8 10 8 10;
+    -fx-text-fill: #111827;
+}
+
+.text-field:focused,
+.text-area:focused,
+.combo-box:focused,
+.date-picker:focused {
+    -fx-border-color: #7DB8DE;
+    -fx-effect: dropshadow(gaussian, rgba(125, 184, 222, 0.30), 9, 0.2, 0, 2);
+}
+
+/* Botones */
+.button {
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 14 8 14;
+    -fx-text-fill: #111827;
+}
+
+.primary-button {
+    -fx-background-color: #9CCAE8;
+    -fx-border-color: #7DB8DE;
+}
+
+.secondary-button {
+    -fx-background-color: #E5E7EB;
+    -fx-border-color: #CBD5E1;
+}
+
+.success-button {
+    -fx-background-color: #BFE7B5;
+    -fx-border-color: #8ECC83;
+}
+
+.warning-button {
+    -fx-background-color: #FFE9A8;
+    -fx-border-color: #F6D66E;
+}
+
+.danger-button {
+    -fx-background-color: #FCA5A5;
+    -fx-border-color: #F87171;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.success-button:hover,
+.warning-button:hover,
+.danger-button:hover {
+    -fx-opacity: 0.86;
+}
+
+/* Mensajes de estado */
+.status-label {
+    -fx-background-color: #E7F8E2;
+    -fx-border-color: #BFE7B5;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 9 11 9 11;
+    -fx-text-fill: #31572C;
+    -fx-font-weight: bold;
+}
+
+/* Imagenes */
+.image-frame {
+    -fx-background-color: rgba(255,255,255,0.90);
+    -fx-background-radius: 24;
+    -fx-border-radius: 24;
+    -fx-border-color: #D8E2F0;
+    -fx-padding: 8;
+    -fx-effect: dropshadow(gaussian, rgba(36, 89, 122, 0.12), 12, 0.16, 0, 4);
+}
+
+/* Tablas */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #D8E2F0;
+    -fx-border-radius: 18;
+    -fx-background-radius: 18;
+    -fx-padding: 0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #EAF4FF;
+    -fx-background-radius: 18 18 0 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-font-weight: bold;
+    -fx-size: 34;
+}
+
+.table-row-cell {
+    -fx-background-color: transparent;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FBFCFF;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #D9ECFA;
+}
+
+/* Pestañas */
+.main-tabs .tab-header-area {
+    -fx-padding: 8 8 0 8;
+}
+
+.tab {
+    -fx-background-radius: 14 14 0 0;
+    -fx-border-radius: 14 14 0 0;
+    -fx-padding: 7 14 7 14;
+}
+
+.tab:selected {
+    -fx-background-color: #D9ECFA;
+}
+
+/* Tarjetas de metricas del inicio */
+.metric-card-blue {
+    -fx-background-color: #D9ECFA;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: #B9DAF3;
+    -fx-padding: 16;
+}
+
+.metric-card-green {
+    -fx-background-color: #E7F8E2;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: #BFE7B5;
+    -fx-padding: 16;
+}
+
+.metric-card-yellow {
+    -fx-background-color: #FFF4C8;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: #FFE9A8;
+    -fx-padding: 16;
+}
+
+.metric-card-lilac {
+    -fx-background-color: #EFE7FF;
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: #E0D1FF;
+    -fx-padding: 16;
+}
