@@ -32,7 +32,7 @@ public class AguguTarjeteroController implements Initializable {
     @FXML private Label lblRolActual, lblRolDescripcion;
     @FXML private Button btnIngresarSistema, btnLimpiarLogin, btnCerrarSesion;
 
-    // ─── INSCRIPCIÓN ─────────────────────────────────────────────────────────
+    // ─── INSCRIPCIÓN ────────────────────────────────────────────────────────
     @FXML private TextField txtNombreNino, txtRegistroCivil, txtMarcaPanal;
     @FXML private DatePicker dpFechaNacimiento;
     @FXML private ComboBox<String> cmbCategoriaNino, cmbSucursalNino, cmbLocalidad;
