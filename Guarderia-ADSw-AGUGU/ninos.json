@@ -44,5 +44,26 @@
     },
     "jornadas": [],
     "__tipo": "Aventurero"
+  },
+  {
+    "marcaLeche": "NAN",
+    "cantidadOnzas": 4,
+    "lecheMaterna": false,
+    "codigosRecipientes": [],
+    "nombre": "asdasd",
+    "fechaNacimiento": "2026-04-28",
+    "registroCivil": 1234223,
+    "marcaPañal": "asdasdsads",
+    "etapaPañal": "1",
+    "carne": {
+      "id": 1234223,
+      "dosis": []
+    },
+    "dieta": {
+      "id": 1234223,
+      "alimentos": []
+    },
+    "jornadas": [],
+    "__tipo": "Acostadito"
   }
 ]

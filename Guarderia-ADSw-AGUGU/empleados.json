@@ -47,5 +47,32 @@
         "ajusteSalario": 0.1
       }
     ]
+  },
+  {
+    "nombre": "sdasdasd",
+    "cedula": 543,
+    "fechaNacimiento": "2026-05-30",
+    "direccion": "",
+    "titulo": "Terapeuta de lenguaje",
+    "tarjetaProfesional": 0,
+    "cargo": "Terapeuta de lenguaje",
+    "experienciaAnios": 5,
+    "realizoInvestigacion": false,
+    "salario": 4.182312607000001E7,
+    "jornadas": [],
+    "evaluaciones": [
+      {
+        "fecha": "2026-05-30",
+        "puntaje": 100,
+        "observaciones": "",
+        "ajusteSalario": 0.1
+      },
+      {
+        "fecha": "2026-05-30",
+        "puntaje": 100,
+        "observaciones": "",
+        "ajusteSalario": 0.1
+      }
+    ]
   }
 ]

@@ -146,6 +146,32 @@ public class AguguTarjeteroController implements Initializable {
         configurarTablas();
         configurarCombos();
         bloquearTabs(true);
+
+        // Listener para refrescar combos al cambiar de pestaña
+        if (tabPanePrincipal != null) {
+            tabPanePrincipal.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+                List<String> empleados = new ArrayList<>();
+                for (Localidad l : guarderia.getLocalidades())
+                    for (Sucursal s : l.getSucursales())
+                        for (Empleado e : s.getEmpleados())
+                            empleados.add(e.getNombre());
+
+                if (newTab == tabDieta && cmbEspecialistaDieta != null)
+                    cmbEspecialistaDieta.setItems(FXCollections.observableArrayList(empleados));
+
+                if (newTab == tabActividades && cmbEmpleadoResponsableActividad != null)
+                    cmbEmpleadoResponsableActividad.setItems(FXCollections.observableArrayList(empleados));
+
+                if (newTab == tabEvaluacion && txtIdEmpleado != null) {
+                    StringBuilder info = new StringBuilder();
+                    for (Localidad l : guarderia.getLocalidades())
+                        for (Sucursal s : l.getSucursales())
+                            for (Empleado e : s.getEmpleados())
+                                info.append(e.getNombre()).append(" - CC: ").append(e.getCedula()).append("\n");
+                    txtIdEmpleado.setPromptText(info.toString().trim());
+                }
+            });
+        }
     }
 
     // ─── Datos de prueba ─────────────────────────────────────────────────────
@@ -715,30 +741,26 @@ public class AguguTarjeteroController implements Initializable {
     }
     @FXML
     private void onCargarNinosDesdeJson() {
-        File f = new File("ninos.json");
-        if (!f.exists()) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Sin archivo",
-                    "No existe ninos.json en:\n" + f.getAbsolutePath());
-            return;
-        }
-        List<Nino> ninos = ninoDAO.listar();
-        if (ninos.isEmpty()) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Sin datos",
-                    "El archivo ninos.json existe pero está vacío.\nRuta: " + f.getAbsolutePath());
-            return;
-        }
-        for (Localidad l : guarderia.getLocalidades())
-            for (Sucursal s : l.getSucursales())
-                s.getNinos().clear();
-        Sucursal s = guarderia.getLocalidades().get(0).getSucursales().get(0);
-        for (Nino n : ninos) s.getNinos().add(n);
-        recargarTodosLosInscritos();
-        log("Cargados " + ninos.size() + " ninos desde: " + f.getAbsolutePath());
-        mostrarAlerta(Alert.AlertType.INFORMATION, "Cargado",
-                ninos.size() + " ninos cargados desde:\n" + f.getAbsolutePath());
-        mostrarAlerta(Alert.AlertType.INFORMATION, "Ruta",
-                new File("ninos.json").getAbsolutePath());
-        return;
+        try {
+            File f = new File("ninos.json");
+            if (!f.exists()) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Sin archivo", "No existe: " + f.getAbsolutePath());
+                return;
+            }
+            List<Nino> ninos = ninoDAO.listar();
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Ninos encontrados", "Total: " + ninos.size());
+            if (ninos.isEmpty()) return;
+            for (Localidad l : guarderia.getLocalidades())
+                for (Sucursal s : l.getSucursales())
+                    s.getNinos().clear();
+            Sucursal s = guarderia.getLocalidades().get(0).getSucursales().get(0);
+            for (Nino n : ninos) s.getNinos().add(n);
+            recargarTodosLosInscritos();
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Cargado", ninos.size() + " ninos cargados.");
+        } catch (Throwable e) {
+        mostrarAlerta(Alert.AlertType.ERROR, "Error al cargar",
+                e.getClass().getSimpleName() + ": " + e.getMessage());
+    }
     }
 
     @FXML

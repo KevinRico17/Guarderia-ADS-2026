@@ -200,19 +200,24 @@ public class NinoDAO {
 
         @Override
         public Nino deserialize(JsonElement json, Type type, JsonDeserializationContext ctx)
-                throws JsonParseException{
-
+                throws JsonParseException {
             JsonObject obj = json.getAsJsonObject();
             String tipoNino = obj.has(CAMPO_TIPO) ? obj.get(CAMPO_TIPO).getAsString() : "";
 
-            return switch(tipoNino){
-                case "Acostadito" -> ctx.deserialize(obj, Acostadito.class);
-                case "Aventurero" -> ctx.deserialize(obj, Aventurero.class);
-                case "Trotamundo" -> ctx.deserialize(obj, Trotamundo.class);
-                case "Jugueton"   -> ctx.deserialize(obj, Jugueton.class);
-                case "Parvulo"    -> ctx.deserialize(obj, Parvulo.class);
-                default -> throw new JsonParseException("Tipo de niño desconocido: " + tipoNino);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>)
+                            (j, t, c) -> LocalDate.parse(j.getAsString()))
+                    .create();
+
+            return switch (tipoNino) {
+                case "Acostadito" -> gson.fromJson(obj, Acostadito.class);
+                case "Aventurero" -> gson.fromJson(obj, Aventurero.class);
+                case "Trotamundo" -> gson.fromJson(obj, Trotamundo.class);
+                case "Jugueton"   -> gson.fromJson(obj, Jugueton.class);
+                case "Parvulo"    -> gson.fromJson(obj, Parvulo.class);
+                default -> throw new JsonParseException("Tipo desconocido: " + tipoNino);
             };
         }
+        }
     }
-}
+
