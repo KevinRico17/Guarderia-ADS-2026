@@ -1434,4 +1434,40 @@ public class AguguTarjeteroController implements Initializable {
     private void onLimpiarLogSerializacion() {
         if (txtLogSerializacion != null) txtLogSerializacion.clear();
     }
+    @FXML
+    private void onVerHistorialEvaluacion() {
+        if (empleadoSeleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Atencion", "Busque primero un empleado."); return;
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("Historial de evaluaciones - ").append(empleadoSeleccionado.getNombre()).append("\n\n");
+        for (Evaluacion e : empleadoSeleccionado.getEvaluaciones())
+            sb.append("Fecha: ").append(e.getFecha()).append(" | Puntaje: ").append(e.getPuntaje())
+                    .append(" | Obs: ").append(e.getObservaciones()).append("\n");
+        if (empleadoSeleccionado.getEvaluaciones().isEmpty()) sb.append("Sin evaluaciones registradas.");
+        mostrarAlerta(Alert.AlertType.INFORMATION, "Historial", sb.toString());
+    }
+
+    @FXML
+    private void onVerTodasSucursales() {
+        StringBuilder sb = new StringBuilder();
+        for (Localidad l : guarderia.getLocalidades()) {
+            sb.append("Localidad: ").append(l.getNombre()).append("\n");
+            for (Sucursal s : l.getSucursales())
+                sb.append("  - ").append(s.getNombre()).append(" | Ninos: ").append(s.getNinos().size()).append("\n");
+        }
+        mostrarAlerta(Alert.AlertType.INFORMATION, "Sucursales", sb.toString());
+    }
+    @FXML
+    private void onEliminarAlimento() {
+        if (ninoSeleccionado == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Atencion", "Consulte primero un nino."); return;
+        }
+        AlimentoFila sel = tblDieta.getSelectionModel().getSelectedItem();
+        if (sel == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Atencion", "Seleccione un alimento de la tabla."); return;
+        }
+        ninoSeleccionado.getDieta().eliminarAlimento(sel.getNombre());
+        recargarDieta(ninoSeleccionado);
+    }
 }
