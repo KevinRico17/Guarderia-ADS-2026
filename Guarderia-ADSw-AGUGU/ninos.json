@@ -1,0 +1,48 @@
+[
+  {
+    "marcaLeche": "NAN",
+    "cantidadOnzas": 4,
+    "lecheMaterna": false,
+    "codigosRecipientes": [],
+    "nombre": "Sofía Martínez",
+    "fechaNacimiento": "2025-11-01",
+    "registroCivil": 100001,
+    "marcaPañal": "Pampers",
+    "etapaPañal": "1",
+    "carne": {
+      "id": 100001,
+      "dosis": []
+    },
+    "dieta": {
+      "id": 100001,
+      "alimentos": []
+    },
+    "jornadas": [],
+    "__tipo": "Acostadito"
+  },
+  {
+    "marcaLeche": "NAN",
+    "cantidadOnzas": 6,
+    "lecheMaterna": false,
+    "codigosRecipientes": [],
+    "codigoJuguete": 101,
+    "nombreJuguete": "Osito",
+    "edadCaminataEnMeses": 9,
+    "usaCaminador": true,
+    "nombre": "Juan Rodríguez",
+    "fechaNacimiento": "2025-01-15",
+    "registroCivil": 100002,
+    "marcaPañal": "Huggies",
+    "etapaPañal": "2",
+    "carne": {
+      "id": 100002,
+      "dosis": []
+    },
+    "dieta": {
+      "id": 100002,
+      "alimentos": []
+    },
+    "jornadas": [],
+    "__tipo": "Aventurero"
+  }
+]

@@ -5,6 +5,7 @@ import co.edu.javeriana.guarderiaadswagugu.modelo.empleados.Evaluacion;
 import co.edu.javeriana.guarderiaadswagugu.modelo.guarderia.*;
 import co.edu.javeriana.guarderiaadswagugu.modelo.ninos.*;
 import co.edu.javeriana.guarderiaadswagugu.modelo.usuarios.Usuario;
+import co.edu.javeriana.guarderiaadswagugu.dao.*;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,7 +33,7 @@ public class AguguTarjeteroController implements Initializable {
     @FXML private Label lblRolActual, lblRolDescripcion;
     @FXML private Button btnIngresarSistema, btnLimpiarLogin, btnCerrarSesion;
 
-    // ─── INSCRIPCIÓN ────────────────────────────────────────────────────────
+    // ─── INSCRIPCIÓN ─────────────────────────────────────────────────────────
     @FXML private TextField txtNombreNino, txtRegistroCivil, txtMarcaPanal;
     @FXML private DatePicker dpFechaNacimiento;
     @FXML private ComboBox<String> cmbCategoriaNino, cmbSucursalNino, cmbLocalidad;
@@ -46,7 +47,8 @@ public class AguguTarjeteroController implements Initializable {
     @FXML private TextField txtBuscarNino;
 
     // ─── DIETA ───────────────────────────────────────────────────────────────
-    @FXML private TextField txtIdNinoDieta, txtNombreNinoDieta, txtEspecialistaDieta;
+    @FXML private TextField txtIdNinoDieta, txtNombreNinoDieta;
+    @FXML private ComboBox<String> cmbEspecialistaDieta;
     @FXML private TextField txtAlimentoPermitido, txtCantidadPermitida;
     @FXML private TextField txtAlimentoProhibido;
     @FXML private TextArea  txtRazonProhibicion;
@@ -59,6 +61,7 @@ public class AguguTarjeteroController implements Initializable {
     @FXML private TextField txtNombreActividad, txtCostoBase, txtLugarActividad;
     @FXML private DatePicker dpFechaActividad;
     @FXML private ComboBox<String> cmbTipoActividad, cmbSucursalActividad;
+    @FXML private ComboBox<String> cmbEmpleadoResponsableActividad;
     @FXML private CheckBox chkPadreAcompana;
     @FXML private Button btnCrearActividad, btnCalcularCosto, btnAsociarNinoActividad;
     @FXML private TextField txtCostoFinal, txtDescuento;
@@ -119,6 +122,11 @@ public class AguguTarjeteroController implements Initializable {
     private Empleado empleadoSeleccionado;
     private Actividad actividadSeleccionada;
 
+    // DAOs
+    private final NinoDAO ninoDAO = new NinoDAO();
+    private final EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+    private final ActividadDAO actividadDAO = new ActividadDAO();
+
     // ─── LISTAS OBSERVABLES ──────────────────────────────────────────────────
     private ObservableList<NinoFila>        listaInscritos    = FXCollections.observableArrayList();
     private ObservableList<AlimentoFila>    listaDieta        = FXCollections.observableArrayList();
@@ -172,6 +180,21 @@ public class AguguTarjeteroController implements Initializable {
                 "NAN", 6, false, 101, "Osito", 9, true);
         s1.inscribirNino(n1);
         s1.inscribirNino(n2);
+
+        // Solo guardar datos de prueba si no existe el archivo
+        if (!new File("empleados.json").exists()) {
+            List<Empleado> empleadosPrueba = new ArrayList<>();
+            empleadosPrueba.add(e1);
+            empleadosPrueba.add(e2);
+            empleadoDAO.guardarTodos(empleadosPrueba);
+        }
+        if (!new File("ninos.json").exists()) {
+            List<Nino> ninosPrueba = new ArrayList<>();
+            ninosPrueba.add(n1);
+            ninosPrueba.add(n2);
+            ninoDAO.guardarTodos(ninosPrueba);
+        }
+
     }
 
     // ─── Configurar columnas de tablas ───────────────────────────────────────
@@ -279,6 +302,23 @@ public class AguguTarjeteroController implements Initializable {
         if (cmbTipoDosis != null)
             cmbTipoDosis.setItems(FXCollections.observableArrayList(
                     "Primera vez", "Refuerzo 1", "Refuerzo 2", "Refuerzo 3"));
+        // Llenar especialistas dieta
+        if (cmbEspecialistaDieta != null) {
+            List<String> empleados = new ArrayList<>();
+            for (Localidad l : guarderia.getLocalidades())
+                for (Sucursal s : l.getSucursales())
+                    for (Empleado e : s.getEmpleados())
+                        empleados.add(e.getNombre());
+            cmbEspecialistaDieta.setItems(FXCollections.observableArrayList(empleados));
+        }
+        if (cmbEmpleadoResponsableActividad != null) {
+            List<String> empleados = new ArrayList<>();
+            for (Localidad l : guarderia.getLocalidades())
+                for (Sucursal s : l.getSucursales())
+                    for (Empleado e : s.getEmpleados())
+                        empleados.add(e.getNombre());
+            cmbEmpleadoResponsableActividad.setItems(FXCollections.observableArrayList(empleados));
+        }
     }
 
     // ═════════════════════════════════════════════════════════════════════════
@@ -368,9 +408,48 @@ public class AguguTarjeteroController implements Initializable {
     // Navegación desde menú lateral
     @FXML private void onAbrirInicio()       { tabPanePrincipal.getSelectionModel().select(tabLogin); }
     @FXML private void onAbrirInscripcion()  { if (tabInscripcion != null && !tabInscripcion.isDisable()) tabPanePrincipal.getSelectionModel().select(tabInscripcion); }
-    @FXML private void onAbrirDieta()        { if (tabDieta != null && !tabDieta.isDisable()) tabPanePrincipal.getSelectionModel().select(tabDieta); }
-    @FXML private void onAbrirActividades()  { if (tabActividades != null && !tabActividades.isDisable()) tabPanePrincipal.getSelectionModel().select(tabActividades); }
-    @FXML private void onAbrirEvaluacion()   { if (tabEvaluacion != null && !tabEvaluacion.isDisable()) tabPanePrincipal.getSelectionModel().select(tabEvaluacion); }
+    @FXML private void onAbrirDieta() {
+        if (tabDieta != null && !tabDieta.isDisable()) {
+            // Refrescar especialistas
+            if (cmbEspecialistaDieta != null) {
+                List<String> empleados = new ArrayList<>();
+                for (Localidad l : guarderia.getLocalidades())
+                    for (Sucursal s : l.getSucursales())
+                        for (Empleado e : s.getEmpleados())
+                            empleados.add(e.getNombre());
+                cmbEspecialistaDieta.setItems(FXCollections.observableArrayList(empleados));
+            }
+            tabPanePrincipal.getSelectionModel().select(tabDieta);
+        }
+    }
+    @FXML private void onAbrirActividades() {
+        if (tabActividades != null && !tabActividades.isDisable()) {
+            // Refrescar empleados responsables
+            if (cmbEmpleadoResponsableActividad != null) {
+                List<String> empleados = new ArrayList<>();
+                for (Localidad l : guarderia.getLocalidades())
+                    for (Sucursal s : l.getSucursales())
+                        for (Empleado e : s.getEmpleados())
+                            empleados.add(e.getNombre());
+                cmbEmpleadoResponsableActividad.setItems(FXCollections.observableArrayList(empleados));
+            }
+            tabPanePrincipal.getSelectionModel().select(tabActividades);
+        }
+    }
+    @FXML private void onAbrirEvaluacion() {
+        if (tabEvaluacion != null && !tabEvaluacion.isDisable()) {
+            if (txtIdEmpleado != null) {
+                StringBuilder info = new StringBuilder();
+                for (Localidad l : guarderia.getLocalidades())
+                    for (Sucursal s : l.getSucursales())
+                        for (Empleado e : s.getEmpleados())
+                            info.append(e.getNombre()).append(" - CC: ").append(e.getCedula()).append("\n");
+                txtIdEmpleado.setPromptText(info.toString().trim());
+            }
+            tabPanePrincipal.getSelectionModel().select(tabEvaluacion);
+        }
+    }
+
     @FXML private void onAbrirConsolidado()  { if (tabConsolidado != null && !tabConsolidado.isDisable()) tabPanePrincipal.getSelectionModel().select(tabConsolidado); }
     @FXML private void onAbrirVacunas()      { if (tabVacunas != null && !tabVacunas.isDisable()) tabPanePrincipal.getSelectionModel().select(tabVacunas); }
     @FXML private void onAbrirSerializacion(){ if (tabSerializacion != null && !tabSerializacion.isDisable()) tabPanePrincipal.getSelectionModel().select(tabSerializacion); }
@@ -428,11 +507,17 @@ public class AguguTarjeteroController implements Initializable {
             msg = "✓ Niño inscrito exitosamente en " + sucNom;
             if (acudiente != null) {
                 acudiente.agregarNino(nino);
-                // Calcular pensión
                 double pension = acudiente.calcularPension(acudiente.getSalario());
                 msg += "\nPensión mensual: $" + String.format("%,.0f", pension);
             }
             lblResultadoCupo.setText("Inscrito en " + sucNom);
+            ninoSeleccionado = nino;
+            try {
+                ninoDAO.agregar(nino);
+                log("Nino guardado en JSON: " + nino.getNombre());
+            } catch (Exception e) {
+                log("Error al guardar nino en JSON: " + e.getMessage());
+            }
             recargarTodosLosInscritos();
             limpiarFormInscripcion();
         } else {
@@ -441,6 +526,7 @@ public class AguguTarjeteroController implements Initializable {
         }
         mostrarAlerta(Alert.AlertType.INFORMATION, "Inscripción", msg);
     }
+
 
     private Nino crearNinoPorCategoria(String cat, String nombre, LocalDate fn, int rc, String marca) {
         String c = cat.toLowerCase();
@@ -603,12 +689,15 @@ public class AguguTarjeteroController implements Initializable {
             mostrarAlerta(Alert.AlertType.WARNING, "Campos incompletos", "Complete todos los campos.");
             return;
         }
+
         double costo;
         try { costo = Double.parseDouble(costoStr); } catch (NumberFormatException e) {
             mostrarAlerta(Alert.AlertType.ERROR, "Error", "Costo debe ser numérico."); return;
         }
 
+
         actividadSeleccionada = new Actividad(nombre, costo, tipo);
+        actividadDAO.agregar(actividadSeleccionada);
         boolean acompana = chkPadreAcompana.isSelected();
         double costoFinal = acompana ? costo * 0.75 : costo;
         double descuento = acompana ? costo * 0.25 : 0;
@@ -623,6 +712,33 @@ public class AguguTarjeteroController implements Initializable {
 
         mostrarAlerta(Alert.AlertType.INFORMATION, "Actividad creada",
                 "Actividad '" + nombre + "' registrada.\nCosto final: $" + String.format("%,.0f", costoFinal));
+    }
+    @FXML
+    private void onCargarNinosDesdeJson() {
+        File f = new File("ninos.json");
+        if (!f.exists()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin archivo",
+                    "No existe ninos.json en:\n" + f.getAbsolutePath());
+            return;
+        }
+        List<Nino> ninos = ninoDAO.listar();
+        if (ninos.isEmpty()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin datos",
+                    "El archivo ninos.json existe pero está vacío.\nRuta: " + f.getAbsolutePath());
+            return;
+        }
+        for (Localidad l : guarderia.getLocalidades())
+            for (Sucursal s : l.getSucursales())
+                s.getNinos().clear();
+        Sucursal s = guarderia.getLocalidades().get(0).getSucursales().get(0);
+        for (Nino n : ninos) s.getNinos().add(n);
+        recargarTodosLosInscritos();
+        log("Cargados " + ninos.size() + " ninos desde: " + f.getAbsolutePath());
+        mostrarAlerta(Alert.AlertType.INFORMATION, "Cargado",
+                ninos.size() + " ninos cargados desde:\n" + f.getAbsolutePath());
+        mostrarAlerta(Alert.AlertType.INFORMATION, "Ruta",
+                new File("ninos.json").getAbsolutePath());
+        return;
     }
 
     @FXML
@@ -714,7 +830,33 @@ public class AguguTarjeteroController implements Initializable {
     @FXML
     private void onBuscarEmpleado() {
         String id = txtIdEmpleado.getText().trim();
-        if (id.isEmpty()) { mostrarAlerta(Alert.AlertType.WARNING, "Error", "Ingrese cédula del empleado."); return; }
+
+        // Si está vacío, mostrar selector con todos los empleados
+        if (id.isEmpty()) {
+            List<Empleado> todos = new ArrayList<>();
+            for (Localidad l : guarderia.getLocalidades())
+                for (Sucursal s : l.getSucursales())
+                    todos.addAll(s.getEmpleados());
+            if (todos.isEmpty()) { mostrarAlerta(Alert.AlertType.WARNING, "Sin empleados", "No hay empleados registrados."); return; }
+            List<String> opciones = new ArrayList<>();
+            for (Empleado e : todos)
+                opciones.add(e.getNombre() + "  -  CC: " + e.getCedula() + "  -  " + e.getCargo());
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(opciones.get(0), opciones);
+            dialog.setTitle("Seleccionar empleado");
+            dialog.setHeaderText("Empleados registrados:");
+            dialog.setContentText("Seleccione:");
+            Optional<String> res = dialog.showAndWait();
+            if (res.isEmpty()) return;
+            Empleado elegido = todos.get(opciones.indexOf(res.get()));
+            txtIdEmpleado.setText(String.valueOf(elegido.getCedula()));
+            empleadoSeleccionado = elegido;
+            txtNombreEmpleado.setText(elegido.getNombre());
+            txtExperienciaEmpleado.setText(String.valueOf(elegido.getExperienciaAnios()));
+            cmbCargoEmpleado.setValue(elegido.getCargo());
+            txtSalarioActual.setText(String.format("%.0f", elegido.getSalario()));
+            return;
+        }
+
         Empleado emp = buscarEmpleadoPorCedula(id);
         if (emp == null) {
             String nombre = txtNombreEmpleado.getText().trim();
@@ -743,6 +885,7 @@ public class AguguTarjeteroController implements Initializable {
                 for (Sucursal s : l.getSucursales()) { s.getEmpleados().add(nuevo); break; }
                 break;
             }
+            empleadoDAO.agregar(nuevo);
             empleadoSeleccionado = nuevo;
             txtNombreEmpleado.setText(nuevo.getNombre());
             txtExperienciaEmpleado.setText(String.valueOf(nuevo.getExperienciaAnios()));
@@ -784,6 +927,7 @@ public class AguguTarjeteroController implements Initializable {
             empleadoSeleccionado.agregarEvaluacion(eval);
             double nuevoSalario = empleadoSeleccionado.getSalario() * (1 + eval.getAjusteSalario());
             empleadoSeleccionado.setSalario(nuevoSalario);
+            empleadoDAO.actualizar(empleadoSeleccionado);
             txtSalarioActual.setText(String.format("%.0f", nuevoSalario));
             listaEvaluaciones.add(new EvaluacionFila(
                     empleadoSeleccionado.getNombre(), empleadoSeleccionado.getCargo(),
@@ -1209,5 +1353,63 @@ public class AguguTarjeteroController implements Initializable {
         public String getEdad()     { return edad; }
         public String getSucursal() { return sucursal; }
         public String getRc()       { return rc; }
+    }
+    @FXML
+    private void onBuscarNinoVacunaPorId() { onActualizarCarne(); }
+    @FXML
+    private void onTipoVacunaSeleccionada() {
+        if (cmbTipoVacuna != null && cmbTipoVacuna.getValue() != null && txtEnfermedad != null)
+            txtEnfermedad.setText(cmbTipoVacuna.getValue());
+    }
+    @FXML
+    private void onCargarEmpleadosDesdeJson() {
+        List<Empleado> empleados = empleadoDAO.listar();
+        if (empleados.isEmpty()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin datos", "No hay empleados en empleados.json."); return;
+        }
+        Sucursal s = guarderia.getLocalidades().get(0).getSucursales().get(0);
+        s.getEmpleados().clear();
+        s.getEmpleados().addAll(empleados);
+        log("Cargados " + empleados.size() + " empleados.");
+        mostrarAlerta(Alert.AlertType.INFORMATION, "Cargado", empleados.size() + " empleados cargados.");
+    }
+
+    @FXML
+    private void onCargarActividadesDesdeCSV() {
+        List<Actividad> actividades = actividadDAO.listar();
+        if (actividades.isEmpty()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Sin datos", "No hay actividades en actividades.csv."); return;
+        }
+        listaActividades.clear();
+        for (Actividad a : actividades)
+            listaActividades.add(new ActividadFila(a.getNombre(), a.getDescripcion(),
+                    "-", "$" + String.format("%,.0f", a.getCostoBase()), "No",
+                    "$" + String.format("%,.0f", a.getCostoBase())));
+        log("Cargadas " + actividades.size() + " actividades.");
+        mostrarAlerta(Alert.AlertType.INFORMATION, "Cargado", actividades.size() + " actividades cargadas.");
+    }
+    @FXML
+    private void onSerializarCarneDesdeSistema() {
+        List<Nino> todos = new ArrayList<>();
+        for (Localidad l : guarderia.getLocalidades())
+            for (Sucursal s : l.getSucursales()) todos.addAll(s.getNinos());
+        if (todos.isEmpty()) { mostrarAlerta(Alert.AlertType.WARNING, "Sin ninos", "No hay ninos inscritos."); return; }
+        List<String> opciones = new ArrayList<>();
+        for (Nino n : todos) opciones.add("RC: " + n.getRegistroCivil() + "  |  " + n.getNombre());
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(opciones.get(0), opciones);
+        dialog.setTitle("Serializar carne"); dialog.setHeaderText("Seleccione el nino:"); dialog.setContentText("Nino:");
+        Optional<String> res = dialog.showAndWait();
+        if (res.isEmpty()) return;
+        Nino elegido = todos.get(opciones.indexOf(res.get()));
+        String ruta = "carne_" + elegido.getRegistroCivil() + ".dat";
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ruta))) {
+            oos.writeObject(elegido.getCarne());
+            log("Carne serializado -> " + ruta);
+            mostrarAlerta(Alert.AlertType.INFORMATION, "Serializado", "Carne guardado:\n" + ruta);
+        } catch (IOException e) { mostrarAlerta(Alert.AlertType.ERROR, "Error", e.getMessage()); }
+    }
+    @FXML
+    private void onLimpiarLogSerializacion() {
+        if (txtLogSerializacion != null) txtLogSerializacion.clear();
     }
 }

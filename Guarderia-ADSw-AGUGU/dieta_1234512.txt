@@ -1,0 +1,9 @@
+DIETA PERSONALIZADA – juan Palomo
+RC: 1234512
+Fecha: 2026-05-30
+
+=== ALIMENTOS PERMITIDOS ===
+  - papas | 3
+
+=== ALIMENTOS PROHIBIDOS ===
+  - arroz | Razón: Sin especificar

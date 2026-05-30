@@ -1,0 +1,51 @@
+[
+  {
+    "nombre": "Ana García",
+    "cedula": 12345678,
+    "fechaNacimiento": "1985-03-10",
+    "direccion": "Calle 50 #20-30",
+    "titulo": "Psicóloga Infantil",
+    "tarjetaProfesional": 7890,
+    "cargo": "Psicóloga",
+    "experienciaAnios": 5,
+    "realizoInvestigacion": true,
+    "salario": 3000000.0,
+    "jornadas": [],
+    "evaluaciones": []
+  },
+  {
+    "nombre": "Carlos López",
+    "cedula": 87654321,
+    "fechaNacimiento": "1980-07-22",
+    "direccion": "Cra 30 #60-15",
+    "titulo": "Nutricionista Infantil",
+    "tarjetaProfesional": 4321,
+    "cargo": "Nutricionista",
+    "experienciaAnios": 8,
+    "realizoInvestigacion": false,
+    "salario": 3100000.0,
+    "jornadas": [],
+    "evaluaciones": []
+  },
+  {
+    "nombre": "asdfsdgsdfs",
+    "cedula": 5345345,
+    "fechaNacimiento": "2026-05-30",
+    "direccion": "",
+    "titulo": "Psicóloga infantil",
+    "tarjetaProfesional": 0,
+    "cargo": "Psicóloga infantil",
+    "experienciaAnios": 45,
+    "realizoInvestigacion": false,
+    "salario": 1.3697576574E9,
+    "jornadas": [],
+    "evaluaciones": [
+      {
+        "fecha": "2026-05-30",
+        "puntaje": 10000,
+        "observaciones": "",
+        "ajusteSalario": 0.1
+      }
+    ]
+  }
+]

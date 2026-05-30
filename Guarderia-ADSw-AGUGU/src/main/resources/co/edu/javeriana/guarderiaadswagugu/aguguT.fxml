@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -20,7 +22,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="820.0" prefWidth="1320.0" styleClass="root-agugu" stylesheets="@agugu_styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.javeriana.guarderiaadswagugu.controllers.AguguTarjeteroController">
+<BorderPane prefHeight="820.0" prefWidth="1320.0" styleClass="root-agugu" stylesheets="@agugu_styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.javeriana.guarderiaadswagugu.controllers.AguguTarjeteroController">
 
     <center>
         <TabPane fx:id="tabPanePrincipal" styleClass="main-tabs" tabClosingPolicy="UNAVAILABLE">
@@ -89,33 +91,78 @@
                 <BorderPane styleClass="content-pane">
                     <top>
                         <VBox spacing="4.0">
-                            <Label styleClass="page-title" text="Inscribir un Nino a la Guarderia" />
+                            <Label styleClass="page-title" text="Inscribir un Niño a la Guarderia" />
                             <Label styleClass="page-subtitle" text="Registro del nino, acudiente, categoria por edad, sucursal, cupo y lista de espera." />
                         </VBox>
                     </top>
                     <center>
                         <HBox spacing="18.0">
-                            <VBox prefWidth="380.0" spacing="11.0" styleClass="form-card">
-                                <Label styleClass="section-title" text="Datos del nino" />
-                                <TextField fx:id="txtNombreNino" promptText="Nombre completo" />
-                                <DatePicker fx:id="dpFechaNacimiento" prefHeight="51.0" prefWidth="477.0" promptText="Fecha de nacimiento" />
-                                <TextField fx:id="txtRegistroCivil" promptText="Registro civil" />
-                                <TextField fx:id="txtMarcaPanal" promptText="Marca de panal" />
-                                <ComboBox fx:id="cmbCategoriaNino" prefHeight="41.0" prefWidth="222.0" promptText="Categoria por edad" />
-                                <ComboBox fx:id="cmbSucursalNino" prefHeight="41.0" prefWidth="224.0" promptText="Sucursal sugerida" />
+                            <VBox prefHeight="785.0" prefWidth="543.0" spacing="11.0" styleClass="form-card">
+                                <Label styleClass="section-title" text="Datos del niño" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                      <TextField fx:id="txtNombreNino" prefHeight="7.0" prefWidth="141.0" promptText="Nombre completo" />
+                                      <TextField fx:id="txtRegistroCivil" prefHeight="11.0" prefWidth="105.0" promptText="Registro civil" />
+                                      <DatePicker fx:id="dpFechaNacimiento" prefHeight="19.0" prefWidth="189.0" promptText="Fecha de nacimiento" />
+                           </children>
+                        </HBox>
+                                <HBox spacing="8.0">
+                                    <TextField fx:id="txtMarcaPanal" promptText="Marca de panal" HBox.hgrow="ALWAYS" />
+                                    <ComboBox fx:id="cmbEtapaPanal" prefHeight="41.0" prefWidth="170.0" promptText="Etapa del panal">
+                                        <items>
+                                            <FXCollections fx:factory="observableArrayList">
+                                                <String fx:value="No usa panal" />
+                                                <String fx:value="Usa panal" />
+                                                <String fx:value="En entrenamiento" />
+                                            </FXCollections>
+                                        </items>
+                                    </ComboBox>
+                                </HBox>
+                        <HBox layoutX="29.0" layoutY="215.0" spacing="8.0">
+                           <children>
+                                      <ComboBox fx:id="cmbSucursalNino" prefHeight="42.0" prefWidth="287.0" promptText="Sucursal sugerida" />
+                                      <ComboBox fx:id="cmbCategoriaNino" prefHeight="41.0" prefWidth="222.0" promptText="Categoria por edad" />
+                           </children>
+                        </HBox>
 
                                 <Label styleClass="section-title" text="Datos del acudiente" />
-                                <TextField fx:id="txtNombreAcudiente" promptText="Nombre acudiente" />
-                                <TextField fx:id="txtDocumentoAcudiente" promptText="Documento" />
-                                <TextField fx:id="txtTelefonoAcudiente" promptText="Telefono" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                      <TextField fx:id="txtDocumentoAcudiente" prefHeight="34.0" prefWidth="209.0" promptText="Documento" />
+                                      <TextField fx:id="txtNombreAcudiente" prefHeight="34.0" prefWidth="226.0" promptText="Nombre acudiente" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                      <TextField fx:id="txtTelefonoEmergenciaFamiliar" prefHeight="34.0" prefWidth="229.0" promptText="Telefono de emergencia familiar" />
+                                      <TextField fx:id="txtTelefonoAcudiente" prefHeight="34.0" prefWidth="243.0" promptText="Telefono" />
+                           </children>
+                        </HBox>
                                 <TextField fx:id="txtDireccionAcudiente" promptText="Direccion" />
                                 <TextField fx:id="txtSalarioAcudiente" promptText="Salario base" />
+                                <Label styleClass="section-title" text="Empresa del acudiente" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                      <TextField fx:id="txtEmpresaAcudiente" promptText="Nombre empresa" />
+                                      <TextField fx:id="txtDireccionEmpresaAcudiente" promptText="Direccion empresa" />
+                                      <TextField fx:id="txtTelefonoEmpresaAcudiente" promptText="Telefono empresa" />
+                           </children>
+                        </HBox>
+                                <CheckBox fx:id="chkSegundoAcudiente" text="Registrar segundo acudiente" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                      <TextField fx:id="txtTelefonoSegundoAcudiente" promptText="Telefono segundo acudiente" />
+                                      <TextField fx:id="txtDocumentoSegundoAcudiente" prefHeight="34.0" prefWidth="199.0" promptText="Documento segundo acudiente" />
+                                      <TextField fx:id="txtNombreSegundoAcudiente" promptText="Nombre segundo acudiente" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0" />
 
-                                <HBox spacing="8.0">
+                                      <HBox spacing="8.0">
                                     <Button fx:id="btnInscribirNino" onAction="#onInscribirNino" styleClass="primary-button" text="Inscribir" />
                                     <Button fx:id="btnLimpiarInscripcion" onAction="#onLimpiarInscripcion" styleClass="secondary-button" text="Limpiar" />
    
-                                   <Label fx:id="lblResultadoCupo" styleClass="status-label" text="Cupo: sin verificar" />
+                                         <Label fx:id="lblResultadoCupo" styleClass="status-label" text="Cupo: sin verificar" />
                                 </HBox>
                                 <Button fx:id="btnGuardarFichaJson" maxWidth="Infinity" onAction="#onGuardarFichaJson" styleClass="success-button" text="Guardar ficha JSON" />
                             </VBox>
@@ -154,15 +201,48 @@
                     </top>
                     <center>
                         <HBox spacing="18.0">
-                            <VBox prefWidth="365.0" spacing="12.0" styleClass="form-card">
+                            <VBox prefHeight="689.0" prefWidth="471.0" spacing="12.0" styleClass="form-card">
                                 <TextField fx:id="txtIdNinoDieta" promptText="ID o registro civil del nino" />
                                 <TextField fx:id="txtNombreNinoDieta" promptText="Nombre del nino" />
-                                <TextField fx:id="txtEspecialistaDieta" promptText="Nutricionista / especialista" />
+                                <ComboBox fx:id="cmbEspecialistaDieta" prefHeight="41.0" prefWidth="350.0" promptText="Nutricionista / especialista" />
                                 <Label styleClass="section-title" text="Alimento permitido" />
                                 <TextField fx:id="txtAlimentoPermitido" promptText="Nombre alimento" />
                                 <TextField fx:id="txtCantidadPermitida" promptText="Cantidad" />
+                                <ComboBox fx:id="cmbUnidadPermitida" prefHeight="41.0" prefWidth="350.0" promptText="Unidad de medida">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="gramos" />
+                                            <String fx:value="ml" />
+                                            <String fx:value="porciones" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
                                 <Label styleClass="section-title" text="Alimento prohibido" />
                                 <TextField fx:id="txtAlimentoProhibido" promptText="Nombre alimento" />
+                                <TextField fx:id="txtCantidadProhibida" promptText="Cantidad" />
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                                      <ComboBox fx:id="cmbUnidadProhibida" prefHeight="41.0" prefWidth="350.0" promptText="Unidad de medida">
+                                          <items>
+                                              <FXCollections fx:factory="observableArrayList">
+                                                  <String fx:value="gramos" />
+                                                  <String fx:value="ml" />
+                                                  <String fx:value="porciones" />
+                                              </FXCollections>
+                                          </items>
+                                      </ComboBox>
+                                      <ComboBox fx:id="cmbTipoRestriccion" prefHeight="41.0" prefWidth="350.0" promptText="Tipo de restriccion">
+                                          <items>
+                                              <FXCollections fx:factory="observableArrayList">
+                                                  <String fx:value="alergia" />
+                                                  <String fx:value="religiosa" />
+                                                  <String fx:value="medica" />
+                                                  <String fx:value="intolerancia" />
+                                              </FXCollections>
+                                          </items>
+                                      </ComboBox>
+                           </children>
+                        </HBox>
                                 <TextArea fx:id="txtRazonProhibicion" prefRowCount="3" promptText="Razon de prohibicion" />
 
                                 <HBox spacing="8.0">
@@ -172,23 +252,29 @@
                                 <HBox spacing="8.0">
                                     <Button fx:id="btnActualizarDieta" onAction="#onActualizarDieta" styleClass="success-button" text="Actualizar" />
                                     <Button fx:id="btnExportarDietaTxt" onAction="#onExportarDietaTxt" styleClass="warning-button" text="Exportar TXT" />
+                                    <Button fx:id="btnEliminarAlimento" styleClass="secondary-button" text="Eliminar alimento" />
                                 </HBox>
-                        <ImageView fitHeight="185.0" fitWidth="397.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@osito3.jpeg" />
-                           </image>
-                        </ImageView>
                             </VBox>
 
                             <VBox styleClass="result-card" HBox.hgrow="ALWAYS">
                                 <TableView fx:id="tblDieta" prefHeight="585.0">
                                     <columns>
                                         <TableColumn fx:id="colAlimento" prefWidth="180" text="Alimento" />
-                                        <TableColumn fx:id="colCantidad" prefWidth="130" text="Cantidad" />
-                                        <TableColumn fx:id="colTipoAlimento" prefWidth="277.0" text="Tipo" />
-                                        <TableColumn fx:id="colRazon" prefWidth="183.0" text="Razon" />
+                                        <TableColumn fx:id="colCantidad" prefWidth="110" text="Cantidad" />
+                                        <TableColumn fx:id="colUnidadMedida" prefWidth="110" text="Unidad" />
+                                        <TableColumn fx:id="colTipoAlimento" prefWidth="180.0" text="Tipo" />
+                                        <TableColumn fx:id="colTipoRestriccion" prefWidth="150.0" text="Tipo restriccion" />
+                                        <TableColumn fx:id="colRazon" prefWidth="170.0" text="Razon" />
                                     </columns>
                                 </TableView>
+                        <ImageView fitHeight="300.0" fitWidth="647.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@osito3.jpeg" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="130.0" />
+                           </VBox.margin>
+                        </ImageView>
                             </VBox>
                         </HBox>
                     </center>
@@ -207,13 +293,27 @@
                         <HBox spacing="18.0">
                             <VBox prefHeight="713.0" prefWidth="373.0" spacing="12.0" styleClass="form-card">
                                 <TextField fx:id="txtNombreActividad" promptText="Nombre de la actividad" />
-                                <ComboBox fx:id="cmbTipoActividad" prefHeight="41.0" prefWidth="177.0" promptText="Tipo de actividad" />
+                                <ComboBox fx:id="cmbTipoActividad" prefHeight="41.0" prefWidth="177.0" promptText="Tipo de actividad">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="baile" />
+                                            <String fx:value="titeres" />
+                                            <String fx:value="visita museo" />
+                                            <String fx:value="piscina" />
+                                            <String fx:value="parque" />
+                                            <String fx:value="marionetas" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                                <TextArea fx:id="txtDescripcionActividad" prefRowCount="2" promptText="Descripcion" />
                                 <ComboBox fx:id="cmbSucursalActividad" prefHeight="41.0" prefWidth="174.0" promptText="Sucursal" />
                                 <TextField fx:id="txtLugarActividad" promptText="Lugar" />
+                                <TextField fx:id="txtRecursosActividad" promptText="Recursos necesarios" />
+                                <ComboBox fx:id="cmbEmpleadoResponsableActividad" prefHeight="41.0" prefWidth="350.0" promptText="Empleado responsable" />
                                 <DatePicker fx:id="dpFechaActividad" prefHeight="54.0" prefWidth="202.0" promptText="Fecha" />
                                 <TextField fx:id="txtCostoBase" promptText="Costo base" />
                                 <CheckBox fx:id="chkPadreAcompana" text="Padre/acudiente acompana" />
-                                <TextField fx:id="txtDescuento" promptText="Descuento aplicado" />
+                                <TextField fx:id="txtDescuento" editable="false" promptText="Descuento aplicado" />
                                 <TextField fx:id="txtCostoFinal" promptText="Costo final" />
 
                                 <HBox spacing="8.0">
@@ -223,6 +323,7 @@
                                     <Button fx:id="btnExportarActividadJson" onAction="#onExportarActividadJson" styleClass="warning-button" text="JSON" />
                                 </HBox>
                                 <Button fx:id="btnAsociarNinoActividad" maxWidth="Infinity" onAction="#onAsociarNinoActividad" prefHeight="29.0" prefWidth="140.0" styleClass="success-button" text="Asociar niño" />
+                                <TextField fx:id="txtBuscarNinoActividad" promptText="Buscar nino por registro civil o nombre" />
                                 <HBox spacing="8.0" />
                         <ImageView fitHeight="191.0" fitWidth="368.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -238,6 +339,7 @@
                                 <VBox styleClass="result-card">
                                     <TableView fx:id="tblActividades" prefHeight="275.0">
                                         <columns>
+                                            <TableColumn fx:id="colSeleccionarActividad" prefWidth="120" text="Seleccionar" />
                                             <TableColumn fx:id="colActividadNombre" prefWidth="180" text="Actividad" />
                                             <TableColumn fx:id="colActividadTipo" prefWidth="140" text="Tipo" />
                                             <TableColumn fx:id="colActividadCosto" prefWidth="120" text="Costo" />
@@ -274,27 +376,39 @@
                     </top>
                     <center>
                         <HBox spacing="18.0">
-                            <VBox prefWidth="370.0" spacing="12.0" styleClass="form-card">
+                            <VBox prefHeight="819.0" prefWidth="477.0" spacing="12.0" styleClass="form-card">
                                 <TextField fx:id="txtIdEmpleado" promptText="ID / cedula empleado" />
                                 <TextField fx:id="txtNombreEmpleado" promptText="Nombre empleado" />
-                                <ComboBox fx:id="cmbCargoEmpleado" prefHeight="41.0" prefWidth="414.0" promptText="Cargo" />
-                                <TextField fx:id="txtExperienciaEmpleado" promptText="Experiencia" />
-                                <TextField fx:id="txtSalarioActual" promptText="Salario actual" />
+                                <ComboBox fx:id="cmbCargoEmpleado" prefHeight="41.0" prefWidth="414.0" promptText="Cargo">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Pediatra" />
+                                            <String fx:value="Nutricionista" />
+                                            <String fx:value="Profesor" />
+                                            <String fx:value="Psicologo" />
+                                            <String fx:value="Terapeuta" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                                <TextField fx:id="txtExperienciaEmpleado"  promptText="Experiencia" />
+                                <TextField fx:id="txtSalarioActual"  promptText="Salario actual" />
+                                <DatePicker fx:id="dpFechaEvaluacion" prefHeight="41.0" prefWidth="350.0" promptText="Fecha de evaluacion" />
+                                <CheckBox fx:id="chkRealizoInvestigacion" text="Realizo investigacion" />
                                 <TextField fx:id="txtPuntajeEvaluacion" promptText="Puntaje evaluacion" />
                                 <TextArea fx:id="txtObservacionesEvaluacion" prefRowCount="4" promptText="Observaciones" />
-                                <TextField fx:id="txtNuevoSalario" promptText="Nuevo salario" />
+                                <TextField fx:id="txtNuevoSalario" editable="false" promptText="Nuevo salario" />
 
                                 <Button fx:id="btnBuscarEmpleado" maxWidth="Infinity" onAction="#onBuscarEmpleado" styleClass="secondary-button" text="Buscar empleado" />
                                 <HBox spacing="8.0">
                                     <Button fx:id="btnRegistrarEvaluacion" onAction="#onRegistrarEvaluacion" styleClass="primary-button" text="Registrar" />
                                     <Button fx:id="btnCalcularAjuste" onAction="#onCalcularAjusteSalario" styleClass="success-button" text="Calcular ajuste" />
-                                   <Button fx:id="btnGuardarEmpleadoJson" maxWidth="Infinity" onAction="#onGuardarEmpleadoJson" styleClass="warning-button" text="Exportar JSON" />
                                 </HBox>
-                        <ImageView fitHeight="204.0" fitWidth="326.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@osito8.jpeg" />
-                           </image>
-                        </ImageView>
+                        <HBox layoutX="29.0" layoutY="568.0" spacing="8.0">
+                           <children>
+                              <Button fx:id="btnGuardarEmpleadoJson1" maxWidth="Infinity" onAction="#onGuardarEmpleadoJson" styleClass="warning-button" text="Exportar JSON" />
+                              <Button fx:id="btnVerHistorialEvaluaciones1" styleClass="secondary-button" text="Ver historial" />
+                           </children>
+                        </HBox>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                             </VBox>
 
@@ -303,11 +417,21 @@
                                     <columns>
                                         <TableColumn fx:id="colEmpleado" prefWidth="180" text="Empleado" />
                                         <TableColumn fx:id="colCargo" prefWidth="140" text="Cargo" />
+                                        <TableColumn fx:id="colFechaEvaluacion" prefWidth="120" text="Fecha" />
+                                        <TableColumn fx:id="colInvestigacion" prefWidth="120" text="Investigacion" />
                                         <TableColumn fx:id="colPuntaje" prefWidth="100" text="Puntaje" />
                                         <TableColumn fx:id="colObservaciones" prefWidth="300" text="Observaciones" />
                                         <TableColumn fx:id="colNuevoSalario" prefWidth="140" text="Nuevo salario" />
                                     </columns>
                                 </TableView>
+                        <ImageView fitHeight="360.0" fitWidth="718.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@osito8.jpeg" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="130.0" />
+                           </VBox.margin>
+                        </ImageView>
                             </VBox>
                         </HBox>
                     </center>
@@ -324,44 +448,56 @@
                     </top>
                     <center>
                         <HBox spacing="18.0">
-                            <VBox prefHeight="675.0" prefWidth="442.0" spacing="12.0" styleClass="form-card">
+                            <VBox prefHeight="705.0" prefWidth="621.0" spacing="12.0" styleClass="form-card">
                                 <ComboBox fx:id="cmbLocalidad" prefHeight="41.0" prefWidth="150.0" promptText="Localidad" />
                                 <ComboBox fx:id="cmbSucursalFinanciera" prefHeight="41.0" prefWidth="146.0" promptText="Sucursal" />
-                                <TextField fx:id="txtIngresosMatriculas" promptText="Ingresos matriculas" />
+                                <DatePicker fx:id="dpPeriodoConsolidado" prefHeight="41.0" prefWidth="350.0" promptText="Periodo" />
+                                <TextField fx:id="txtIngresosMatriculas"  promptText="Ingresos matriculas" />
                                 <TextField fx:id="txtIngresosPensiones" promptText="Ingresos pensiones" />
-                                <TextField fx:id="txtIngresosJornadas" promptText="Ingresos jornadas" />
-                                <TextField fx:id="txtIngresosExtras" promptText="Ingresos extras" />
-                                <TextField fx:id="txtGastosSucursal" promptText="Gastos sucursal" />
-                                <TextField fx:id="txtTotalIngresos" promptText="Total ingresos" />
-                                <TextField fx:id="txtTotalGastos" promptText="Total gastos" />
-                                <TextField fx:id="txtBalance" promptText="Balance" />
+                                <TextField fx:id="txtIngresosJornadas"  promptText="Ingresos jornadas" />
+                                <TextField fx:id="txtIngresosActividades"  promptText="Ingresos actividades" />
+                                <TextField fx:id="txtIngresosExtras"  promptText="Ingresos extras" />
+                                <TextField fx:id="txtGastosSucursal"  promptText="Gastos sucursal" />
+                                <TextField fx:id="txtTotalIngresos" editable="false"  promptText="Total ingresos" />
+                                <TextField fx:id="txtTotalGastos" editable="false"  promptText="Total gastos" />
+                                <TextField fx:id="txtBalance" editable="false" promptText="Balance" />
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
       
                                       <Button fx:id="btnCalcularConsolidado" maxWidth="Infinity" onAction="#onCalcularConsolidado" styleClass="primary-button" text="Calcular consolidado" />
                                       <Button fx:id="btnGenerarResumenTxt" maxWidth="Infinity" onAction="#onGenerarResumenTxt" styleClass="success-button" text="Generar resumen TXT" />
-                                      <Button fx:id="btnExportarConsolidadoCsv" maxWidth="Infinity" onAction="#onExportarConsolidadoCsv" styleClass="warning-button" text="Exportar CSV" />
                            </children>
                         </HBox>
-                        <ImageView fitHeight="205.0" fitWidth="337.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@osito6.jpeg" />
-                           </image>
-                           <VBox.margin>
-                              <Insets left="30.0" />
-                           </VBox.margin>
-                        </ImageView>
+                        <HBox layoutX="29.0" layoutY="616.0" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="btnExportarConsolidadoCsv1" maxWidth="Infinity" onAction="#onExportarConsolidadoCsv" styleClass="warning-button" text="Exportar CSV" />
+                              <Button fx:id="btnVerTodasSucursales1" maxWidth="Infinity" styleClass="secondary-button" text="Ver todas las sucursales" />
+                           </children>
+                        </HBox>
                             </VBox>
 
                             <VBox styleClass="result-card" HBox.hgrow="ALWAYS">
                                 <TableView fx:id="tblConsolidado" prefHeight="585.0">
                                     <columns>
                                         <TableColumn fx:id="colSucursal" prefWidth="180" text="Sucursal" />
-                                        <TableColumn fx:id="colIngresos" prefWidth="150" text="Ingresos" />
-                                        <TableColumn fx:id="colGastos" prefWidth="150" text="Gastos" />
-                                        <TableColumn fx:id="colBalance" prefWidth="150" text="Balance" />
+                                        <TableColumn fx:id="colIngresosMatriculas" prefWidth="120" text="Matriculas" />
+                                        <TableColumn fx:id="colIngresosPensiones" prefWidth="120" text="Pensiones" />
+                                        <TableColumn fx:id="colIngresosJornadas" prefWidth="120" text="Jornadas" />
+                                        <TableColumn fx:id="colIngresosActividades" prefWidth="120" text="Actividades" />
+                                        <TableColumn fx:id="colIngresosExtras" prefWidth="120" text="Extras" />
+                                        <TableColumn fx:id="colIngresos" prefWidth="120" text="Total ingresos" />
+                                        <TableColumn fx:id="colGastos" prefWidth="120" text="Gastos" />
+                                        <TableColumn fx:id="colBalance" prefWidth="120" text="Balance" />
                                     </columns>
                                 </TableView>
+                        <ImageView fitHeight="326.0" fitWidth="559.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@osito6.jpeg" />
+                           </image>
+                           <VBox.margin>
+                              <Insets left="140.0" />
+                           </VBox.margin>
+                        </ImageView>
                             </VBox>
                         </HBox>
                     </center>
@@ -379,9 +515,20 @@
                     <center>
                         <HBox spacing="18.0">
                             <VBox prefHeight="702.0" prefWidth="472.0" spacing="12.0" styleClass="form-card">
-                                <TextField fx:id="txtIdNinoVacuna" promptText="ID / codigo de barras nino" />
+                                <TextField fx:id="txtIdNinoVacuna" onAction="#onBuscarNinoVacunaPorId" promptText="ID / codigo de barras nino" />
                                 <TextField fx:id="txtNombreNinoVacuna" promptText="Nombre del nino" />
-                                <ComboBox fx:id="cmbTipoVacuna" prefHeight="41.0" prefWidth="190.0" promptText="Tipo de vacuna" />
+                                <ComboBox fx:id="cmbTipoVacuna" onAction="#onTipoVacunaSeleccionada" prefHeight="41.0" prefWidth="190.0" promptText="Tipo de vacuna">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="varicela" />
+                                            <String fx:value="influenza" />
+                                            <String fx:value="obligatoria gobierno" />
+                                            <String fx:value="neumococo" />
+                                            <String fx:value="rotavirus" />
+                                            <String fx:value="sarampion" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
                                 <TextField fx:id="txtEnfermedad" promptText="Enfermedad" />
                                 <DatePicker fx:id="dpFechaDosis" prefHeight="51.0" prefWidth="451.0" promptText="Fecha dosis" />
                                 <TextField fx:id="txtLaboratorio" promptText="Laboratorio" />
@@ -389,6 +536,9 @@
                                 <ComboBox fx:id="cmbTipoDosis" prefHeight="41.0" prefWidth="191.0" promptText="Primera vez / Refuerzo" />
                                 <CheckBox fx:id="chkPrimeraVez" text="Primera vez" />
                                 <CheckBox fx:id="chkRefuerzo" text="Refuerzo" />
+                                <TextField fx:id="txtNumeroRefuerzo" promptText="Numero de refuerzo" />
+                                <CheckBox fx:id="chkGeneraMalestar" text="Genera malestar" />
+                                <CheckBox fx:id="chkEsGratuita" text="Es gratuita" />
                                 <CheckBox fx:id="chkVacunaPrivada" text="Vacuna privada con costo" />
                                 <TextField fx:id="txtCostoVacuna" promptText="Costo vacuna" />
 
@@ -397,7 +547,6 @@
                                     <Button fx:id="btnRegistrarDosis" onAction="#onRegistrarDosis" styleClass="primary-button" text="Registrar dosis" />
                                     <Button fx:id="btnActualizarCarne" onAction="#onActualizarCarne" styleClass="success-button" text="Actualizar carne" />
                                     <Button fx:id="btnExportarPendientesJson" onAction="#onExportarPendientesJson" styleClass="warning-button" text="JSON" />
-                                    <Button fx:id="btnSerializarCarne" onAction="#onSerializarCarne" styleClass="secondary-button" text="Serializar" />
                                 </HBox>
                                 <HBox spacing="8.0" />
                                 <Button fx:id="btnGenerarGraficoTorta" maxWidth="Infinity" onAction="#onGenerarGraficoTorta" styleClass="success-button" text="Generar grafico de torta" />
@@ -409,7 +558,8 @@
                                         <columns>
                                             <TableColumn fx:id="colNinoPendiente" prefWidth="180" text="Nino pendiente" />
                                             <TableColumn fx:id="colEdadPendiente" prefWidth="80" text="Edad" />
-                                            <TableColumn fx:id="colVacunaPendiente" prefWidth="275.0" text="Vacuna pendiente" />
+                                            <TableColumn fx:id="colVacunaPendiente" prefWidth="185.0" text="Vacuna pendiente" />
+                                            <TableColumn fx:id="colTipoVacunaPendiente" prefWidth="185.0" text="Tipo vacuna pendiente" />
                                             <TableColumn fx:id="colSucursalPendiente" prefWidth="211.0" text="Sucursal" />
                                         </columns>
                                     </TableView>
@@ -452,12 +602,18 @@
                             <VBox prefWidth="390.0" spacing="12.0" styleClass="form-card">
                                 <TextField fx:id="txtRutaArchivoDat" promptText="Ruta archivo .dat" />
                                 <TextField fx:id="txtRutaBackupJson" promptText="Ruta backup JSON" />
+                                <TextField fx:id="txtFechaHoraUltimoBackup" editable="false" promptText="Fecha y hora del ultimo backup" />
                                 <Label fx:id="lblEstadoSerializacion" styleClass="status-label" text="Estado: sin ejecutar" />
 
                                 <Button fx:id="btnSeleccionarArchivo" maxWidth="Infinity" onAction="#onSeleccionarArchivo" styleClass="secondary-button" text="Seleccionar archivo" />
                                 <Button fx:id="btnGuardarEstadoSistema" maxWidth="Infinity" onAction="#onGuardarEstadoSistema" styleClass="primary-button" text="Guardar estado del sistema" />
                                 <Button fx:id="btnRestaurarEstadoSistema" maxWidth="Infinity" onAction="#onRestaurarEstadoSistema" styleClass="success-button" text="Restaurar estado del sistema" />
                                 <Button fx:id="btnGenerarBackupJson" maxWidth="Infinity" onAction="#onGenerarBackupJson" styleClass="warning-button" text="Generar backup JSON" />
+                                <Button fx:id="btnCargarNinos" maxWidth="Infinity" onAction="#onCargarNinosDesdeJson" styleClass="success-button" text="Cargar ninos desde JSON" />
+                                <Button fx:id="btnCargarEmpleados" maxWidth="Infinity" onAction="#onCargarEmpleadosDesdeJson" styleClass="success-button" text="Cargar empleados desde JSON" />
+                                <Button fx:id="btnCargarActividades" maxWidth="Infinity" onAction="#onCargarActividadesDesdeCSV" styleClass="primary-button" text="Cargar actividades desde CSV" />
+                                <Button fx:id="btnSerializarCarneDesdeSistema" maxWidth="Infinity" onAction="#onSerializarCarneDesdeSistema" styleClass="secondary-button" text="Serializar carne de vacunas" />
+                                <Button fx:id="btnLimpiarLogSerializacion" maxWidth="Infinity" onAction="#onLimpiarLogSerializacion" styleClass="secondary-button" text="Limpiar log" />
                         <ImageView fitHeight="215.0" fitWidth="353.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@osito4.jpeg" />

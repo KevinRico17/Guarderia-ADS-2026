@@ -143,7 +143,7 @@ public class NinoDAO {
 
                 pw.println("--- Alimentos PROHIBIDOS ---");
                 nino.getDieta().getAlimentosProhibidos()
-                    .forEach(a -> pw.println("  x " + a.getNombre() + " | Razón: " + a.getRazon()));
+                        .forEach(a -> pw.println("  x " + a.getNombre() + " | Razon: " + a.getRazonProhibicion()));
             }
         }catch(IOException e){
 
@@ -189,8 +189,11 @@ public class NinoDAO {
 
         @Override
         public JsonElement serialize(Nino nino, Type type, JsonSerializationContext ctx){
-
-            JsonObject obj = ctx.serialize(nino, nino.getClass()).getAsJsonObject();
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>)
+                            (src, t, c) -> new JsonPrimitive(src.toString()))
+                    .create();
+            JsonObject obj = gson.toJsonTree(nino, nino.getClass()).getAsJsonObject();
             obj.addProperty(CAMPO_TIPO, nino.getClass().getSimpleName());
             return obj;
         }
